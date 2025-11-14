@@ -5,8 +5,8 @@ const StuDashboard = () => {
   return (
     <div>
       {/* ---------------------------- */}
-      <div className="relative w-full h-[600px] overflow-hidden">
-        <div className="inset-0 opacity-100 transition-opacity duration-700">
+      <div className="relative w-full h-[600px]">
+        <div className=" opacity-100 transition-opacity duration-700">
           <img src="/img/bgMain.jpg" className="w-full h-full object-cover" />
           <div className="absolute top-20 left-10 bg-black/50 text-white p-10 rounded-lg w-[40%]">
             <h1 className="text-5xl font-semibold mb-5 leading-tight">
