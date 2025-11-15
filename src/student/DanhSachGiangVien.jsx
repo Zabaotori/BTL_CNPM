@@ -106,7 +106,7 @@ const DanhSachGiangVien = () => {
 
             <div className="mt-4 flex justify-end">
               <a
-                href="/buoituvan"
+                href="/student/buoituvan"
                 className="inline-flex items-center rounded-full border border-cyan-600 px-3 py-1.5 text-xs font-medium text-cyan-700 hover:bg-cyan-50"
               >
                 Xem buổi tư vấn
