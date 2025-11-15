@@ -11,18 +11,18 @@ const initialSessions = [
   },
   {
     id: 2,
-    name: "Tư vấn học kỳ 241",
-    lecturer: "Giảng viên B",
-    room: "H6 - 201",
-    time: "T6, 9h - 11h",
+    name: "Bổ túc PPL A",
+    lecturer: "Giảng viên A",
+    room: "H3 - 301",
+    time: "T6, 7h - 9h",
     status: "Đã xác nhận",
   },
 ];
 
-const LichCuaToi = () => {
+const LichCuaToiGV = () => {
   const [search, setSearch] = useState("");
   const [sessions] = useState(initialSessions);
-  const [selectedSession, setSelectedSession] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
   const filteredSessions = sessions.filter((s) => {
     const keyword = search.toLowerCase();
@@ -42,7 +42,7 @@ const LichCuaToi = () => {
             Lịch tư vấn của tôi
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Danh sách các buổi tư vấn mà bạn đã đăng ký hoặc đã được xác nhận.
+            Danh sách các buổi tư vấn mà bạn đã tạo và đã chốt lịch.
           </p>
         </div>
 
@@ -57,7 +57,6 @@ const LichCuaToi = () => {
         </div>
       </header>
 
-      {/* Table */}
       <section className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
         <table className="min-w-full text-sm">
           <thead className="bg-slate-50 text-left text-xs font-semibold uppercase text-slate-500">
@@ -88,10 +87,16 @@ const LichCuaToi = () => {
                 <td className="px-4 py-3 text-right space-x-2">
                   <button
                     type="button"
-                    onClick={() => setSelectedSession(s)}
                     className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
                   >
-                    Chi tiết
+                    Chỉnh sửa
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDelete(s)}
+                    className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-100"
+                  >
+                    Xoá
                   </button>
                 </td>
               </tr>
@@ -110,9 +115,16 @@ const LichCuaToi = () => {
         </table>
       </section>
 
-      <SessionDetailModal
-        session={selectedSession}
-        onClose={() => setSelectedSession(null)}
+      <ConfirmModal
+        open={!!confirmDelete}
+        title="Xoá buổi tư vấn"
+        message={
+          confirmDelete
+            ? `Bạn có chắc muốn xoá buổi “${confirmDelete.name}” khỏi lịch không?`
+            : ""
+        }
+        onCancel={() => setConfirmDelete(null)}
+        onConfirm={() => setConfirmDelete(null)}
       />
     </div>
   );
@@ -134,44 +146,30 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-const SessionDetailModal = ({ session, onClose }) => {
-  if (!session) return null;
+const ConfirmModal = ({ open, title, message, onCancel, onConfirm }) => {
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
-        <h2 className="text-lg font-semibold text-slate-800 mb-2">
-          Chi tiết buổi tư vấn
+        <h2 className="text-lg font-semibold text-slate-800 mb-3">
+          {title || "Xác nhận"}
         </h2>
-        <div className="text-sm text-slate-700 space-y-1 mb-4">
-          <p>
-            <span className="font-medium">Tên buổi: </span>
-            {session.name}
-          </p>
-          <p>
-            <span className="font-medium">Giảng viên: </span>
-            {session.lecturer}
-          </p>
-          <p>
-            <span className="font-medium">Phòng: </span>
-            {session.room}
-          </p>
-          <p>
-            <span className="font-medium">Thời gian: </span>
-            {session.time}
-          </p>
-          <p>
-            <span className="font-medium">Trạng thái: </span>
-            {session.status}
-          </p>
-        </div>
-        <div className="flex justify-end">
+        <p className="text-sm text-slate-600 mb-6">{message}</p>
+        <div className="flex justify-end gap-3 text-sm">
           <button
             type="button"
-            onClick={onClose}
-            className="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-700"
+            onClick={onCancel}
+            className="rounded-lg border border-slate-200 px-4 py-2 font-medium text-slate-700 hover:bg-slate-50"
           >
-            Đóng
+            Huỷ
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className="rounded-lg bg-cyan-600 px-4 py-2 font-medium text-white hover:bg-cyan-700"
+          >
+            OK
           </button>
         </div>
       </div>
@@ -179,4 +177,4 @@ const SessionDetailModal = ({ session, onClose }) => {
   );
 };
 
-export default LichCuaToi;
+export default LichCuaToiGV;

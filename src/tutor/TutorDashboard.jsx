@@ -1,10 +1,10 @@
 import React from "react";
 
-const StuDashboard = () => {
+const TutorDashboard = () => {
   const stats = [
-    { label: "Buổi tư vấn đã đăng ký", value: 3 },
-    { label: "Buổi sắp diễn ra", value: 2 },
-    { label: "Giảng viên đang mở lịch", value: 5 },
+    { label: "Buổi tư vấn đã tạo", value: 5 },
+    { label: "Buổi đã chốt lịch", value: 3 },
+    { label: "Sinh viên đã đăng ký", value: 87 },
   ];
 
   const nextSessions = [
@@ -28,7 +28,7 @@ const StuDashboard = () => {
     <div className="space-y-10">
       {/* Hero */}
       <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-cyan-700 via-sky-600 to-blue-600 text-white shadow-lg">
-        <div className="absolute inset-0 opacity-20">
+        <div className="absolute inset-0 opacity-15">
           <img
             src="/img/bgMain.jpg"
             alt="Background"
@@ -39,22 +39,21 @@ const StuDashboard = () => {
         <div className="relative p-8 sm:p-10 lg:p-12 flex flex-col gap-6 sm:flex-row sm:items-center">
           <div className="flex-1">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight">
-              Quản lý buổi tư vấn <br />
-              &amp; lịch làm việc với giảng viên
+              Quản lý buổi tư vấn &amp; lịch làm việc
             </h1>
             <p className="mt-4 text-sm sm:text-base text-cyan-100 max-w-xl">
-              Đăng ký buổi tư vấn, theo dõi lịch và trạng thái buổi làm việc với
-              giảng viên một cách trực quan.
+              Tạo, chỉnh sửa và chốt lịch các buổi tư vấn với sinh viên. Theo
+              dõi số lượng đăng ký và trạng thái buổi tư vấn.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a
-                href="/buoituvan"
+                href="/tutor/buoituvan"
                 className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-medium text-cyan-700 shadow-sm hover:bg-cyan-50"
               >
-                Đăng ký buổi tư vấn
+                Quản lý buổi tư vấn
               </a>
               <a
-                href="/lichcuatoi"
+                href="/tutor/lichcuatoi"
                 className="inline-flex items-center rounded-full border border-white/70 px-4 py-2 text-sm font-medium text-white hover:bg-white/10"
               >
                 Xem lịch của tôi
@@ -93,7 +92,7 @@ const StuDashboard = () => {
       {/* Stats */}
       <section>
         <h2 className="text-lg font-semibold text-slate-800 mb-4">
-          Tổng quan tư vấn của tôi
+          Thống kê nhanh
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {stats.map((s) => (
@@ -115,4 +114,4 @@ const StuDashboard = () => {
   );
 };
 
-export default StuDashboard;
+export default TutorDashboard;

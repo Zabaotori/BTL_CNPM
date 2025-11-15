@@ -1,16 +1,9 @@
 import React from "react";
-import { Bell, MessageCircle } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
+import { Bell, MessageSquare } from "lucide-react";
 import Footer from "../Footer/Footer";
 
-const navItems = [
-  { to: "/", label: "Trang chủ", end: true },
-  { to: "/buoituvan", label: "Buổi tư vấn" },
-  { to: "/lichcuatoi", label: "Lịch của tôi" },
-  { to: "/giangvien", label: "Giảng viên" },
-];
-
-const StuHeader = () => {
+const TutorHeader = () => {
   const navLinkClass = ({ isActive }) =>
     `px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition
      ${isActive ? "bg-white/20" : "hover:bg-cyan-600"}`;
@@ -31,22 +24,24 @@ const StuHeader = () => {
                 HCMUT Consultation System
               </div>
               <div className="text-sm font-semibold">
-                Hệ thống tư vấn học tập
+                Khu vực giảng viên tư vấn
               </div>
             </div>
           </div>
 
           <nav className="flex items-center gap-1 text-sm">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                className={navLinkClass}
-              >
-                {item.label}
-              </NavLink>
-            ))}
+            <NavLink to="/tutor" end className={navLinkClass}>
+              Bảng điều khiển
+            </NavLink>
+            <NavLink to="/tutor/buoituvan" className={navLinkClass}>
+              Buổi tư vấn
+            </NavLink>
+            <NavLink to="/tutor/lichcuatoi" className={navLinkClass}>
+              Lịch của tôi
+            </NavLink>
+            <NavLink to="/tutor/quanly" className={navLinkClass}>
+              Quản lý đăng ký
+            </NavLink>
           </nav>
         </div>
 
@@ -57,7 +52,7 @@ const StuHeader = () => {
           >
             <Bell className="w-5 h-5" />
             <span className="absolute -top-0.5 -right-0.5 inline-flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold">
-              3
+              2
             </span>
           </button>
 
@@ -65,7 +60,7 @@ const StuHeader = () => {
             type="button"
             className="p-2 rounded-full hover:bg-cyan-600 transition"
           >
-            <MessageCircle className="w-5 h-5" />
+            <MessageSquare className="w-5 h-5" />
           </button>
 
           <div className="flex items-center gap-2">
@@ -75,14 +70,16 @@ const StuHeader = () => {
               className="w-9 h-9 rounded-full border border-white/60 object-cover"
             />
             <div className="hidden sm:block text-xs leading-tight">
-              <div className="font-semibold">SV. Nguyễn Văn A</div>
-              <div className="text-cyan-100">Khoa KH &amp; KT Máy tính</div>
+              <div className="font-semibold">GV. Nguyễn Văn A</div>
+              <div className="text-cyan-100">
+                Khoa Khoa học &amp; Kỹ thuật Máy tính
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* MAIN CONTENT */}
+      {/* CONTENT */}
       <main className="flex-1 w-full">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
           <Outlet />
@@ -95,4 +92,4 @@ const StuHeader = () => {
   );
 };
 
-export default StuHeader;
+export default TutorHeader;

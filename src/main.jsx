@@ -1,29 +1,70 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-import { DatePicker } from 'antd';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import StuDashboard from './student/StuDashboard';
-import StuHeader from './student/stuHeader';
-import BuoiTuVan from './student/BuoiTuVan';
-import LichCuaToi from './student/LichCuaToi';
-import DanhSachGiangVien from './student/DanhSachGiangVien';
+// Auth
+import RequireAuth from "./components/RequireAuth";
+import Login from "./components/Login";
 
-createRoot(document.getElementById('root')).render(
+// Student
+import StuHeader from "./student/StuHeader";
+import StuDashboard from "./student/StuDashboard";
+import BuoiTuVan from "./student/BuoiTuVan";
+import LichCuaToi from "./student/LichCuaToi";
+import DanhSachGiangVien from "./student/DanhSachGiangVien";
+
+// Tutor
+import TutorHeader from "./tutor/TutorHeader";
+import TutorDashboard from "./tutor/TutorDashboard";
+import BuoiTuVanGV from "./tutor/BuoiTuVanGV";
+import LichCuaToiGV from "./tutor/LichCuaToiGV";
+import QuanLyDangKy from "./tutor/QuanLyDangKy";
+
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<StuHeader></StuHeader>}>
-            <Route index element={<StuDashboard></StuDashboard>}></Route>
-            <Route path='/buoituvan' element={<BuoiTuVan></BuoiTuVan>}></Route>
-            <Route path='/lichcuatoi' element={<LichCuaToi></LichCuaToi>}></Route>
-            <Route path='/xemgiangvien' element={<DanhSachGiangVien></DanhSachGiangVien>}></Route>
-          </Route>
-          <Route ></Route>
-        </Routes>
-      </BrowserRouter>
-    </>
-  </StrictMode>,
-)
+    <BrowserRouter>
+      <Routes>
+
+        {/* Trang login */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Mở trang web → luôn đưa về login */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
+        {/* ================= STUDENT ================= */}
+        <Route
+          path="/student"
+          element={
+            <RequireAuth role="student">
+              <StuHeader />
+            </RequireAuth>
+          }
+        >
+          <Route index element={<StuDashboard />} />
+          <Route path="buoituvan" element={<BuoiTuVan />} />
+          <Route path="lichcuatoi" element={<LichCuaToi />} />
+          <Route path="giangvien" element={<DanhSachGiangVien />} />
+        </Route>
+
+        {/* ================= TUTOR ================= */}
+        <Route
+          path="/tutor"
+          element={
+            <RequireAuth role="tutor">
+              <TutorHeader />
+            </RequireAuth>
+          }
+        >
+          <Route index element={<TutorDashboard />} />
+          <Route path="buoituvan" element={<BuoiTuVanGV />} />
+          <Route path="lichcuatoi" element={<LichCuaToiGV />} />
+          <Route path="quanly" element={<QuanLyDangKy />} />
+        </Route>
+
+        {/* Nếu route không tồn tại → trở về /login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </BrowserRouter>
+  </StrictMode>
+);
