@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const StuDashboard = () => {
   const stats = [
@@ -27,7 +28,7 @@ const StuDashboard = () => {
   return (
     <div className="space-y-10">
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-cyan-700 via-sky-600 to-blue-600 text-white shadow-lg">
+      <section className="relative overflow-hidden rounded-2xl bg-linear-to-r from-cyan-700 via-sky-600 to-blue-600 text-white shadow-lg">
         <div className="absolute inset-0 opacity-20">
           <img
             src="/img/bgMain.jpg"
@@ -47,18 +48,18 @@ const StuDashboard = () => {
               giảng viên một cách trực quan.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href="/buoituvan"
+              <NavLink
+                to="/student/buoituvan"
                 className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-medium text-cyan-700 shadow-sm hover:bg-cyan-50"
               >
                 Đăng ký buổi tư vấn
-              </a>
-              <a
-                href="/lichcuatoi"
+              </NavLink>
+              <NavLink
+                to="/student/lichcuatoi"
                 className="inline-flex items-center rounded-full border border-white/70 px-4 py-2 text-sm font-medium text-white hover:bg-white/10"
               >
                 Xem lịch của tôi
-              </a>
+              </NavLink>
             </div>
           </div>
 

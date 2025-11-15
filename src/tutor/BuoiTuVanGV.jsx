@@ -182,22 +182,27 @@ const BuoiTuVanGV = () => {
 
 const CreateSessionModal = ({ open, onClose }) => {
   if (!open) return null;
+  const [freeTimes, setFreeTimes] = useState([{ date: "", time: "" }]);
+
+  const addFreeTime = () => {
+    setFreeTimes([...freeTimes, { date: "", time: "" }]);
+  };
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
+    <div className="fixed inset-0 overflow-y-auto z-40 flex items-center justify-center bg-black/40 px-4">
+      <div className="w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
         <h2 className="text-lg font-semibold text-slate-800 mb-4">
           Tạo buổi tư vấn mới
         </h2>
 
-        <div className="space-y-4 text-sm">
+        <form className="space-y-4 text-sm">
           <div>
             <label className="block text-slate-700 text-sm font-medium">
               Tên buổi tư vấn
             </label>
             <input
               type="text"
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="mt-1 w-full rounded-lg border border-slate-400 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Ví dụ: Bổ túc PPL A"
             />
           </div>
@@ -208,7 +213,7 @@ const CreateSessionModal = ({ open, onClose }) => {
             </label>
             <input
               type="text"
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="mt-1 w-full rounded-lg border border-slate-400 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Ví dụ: Nguyên lý ngôn ngữ lập trình"
             />
           </div>
@@ -219,7 +224,7 @@ const CreateSessionModal = ({ open, onClose }) => {
             </label>
             <textarea
               rows={3}
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="mt-1 w-full rounded-lg border border-slate-400 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
               placeholder="Nội dung buổi tư vấn, đối tượng sinh viên, yêu cầu chuẩn bị..."
             />
           </div>
@@ -231,7 +236,7 @@ const CreateSessionModal = ({ open, onClose }) => {
               </label>
               <input
                 type="date"
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="mt-1 w-full rounded-lg border border-slate-400 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             <div>
@@ -240,11 +245,46 @@ const CreateSessionModal = ({ open, onClose }) => {
               </label>
               <input
                 type="date"
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="mt-1 w-full rounded-lg border border-slate-400 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
           </div>
-        </div>
+
+          {freeTimes.map((_, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 border p-3 rounded-lg bg-slate-50"
+          >
+            <div>
+              <label className="block text-slate-700 text-sm font-medium">
+                Thời gian rảnh (Ngày)
+              </label>
+              <input
+                type="date"
+                className="mt-1 w-full rounded-lg border border-slate-400 px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <label className="block text-slate-700 text-sm font-medium">
+                Thời gian rảnh (Giờ)
+              </label>
+              <input
+                type="time"
+                className="mt-1 w-full rounded-lg border border-slate-400 px-3 py-2"
+              />
+            </div>
+          </div>
+        ))}
+      </form>
+
+      {/* Nút thêm thời gian rảnh */}
+      <div
+        className="bg-cyan-500 text-white rounded text-center p-2 mt-3 cursor-pointer hover:bg-cyan-600"
+        onClick={addFreeTime}
+      >
+        + Thêm thời gian rảnh
+      </div>
 
         <div className="mt-6 flex justify-end gap-3 text-sm">
           <button

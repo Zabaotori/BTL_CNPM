@@ -6,8 +6,7 @@ const initialSessions = [
     name: "Bổ túc PPL A",
     lecturer: "Giảng viên A",
     room: "H3 - 301",
-    time: "T3, 7h - 9h",
-    status: "Đã xác nhận",
+    time: "T3, 7h - 9h",  
   },
   {
     id: 2,
@@ -15,7 +14,6 @@ const initialSessions = [
     lecturer: "Giảng viên A",
     room: "H3 - 301",
     time: "T6, 7h - 9h",
-    status: "Đã xác nhận",
   },
 ];
 
@@ -65,7 +63,6 @@ const LichCuaToiGV = () => {
               <th className="px-4 py-3">Giảng viên</th>
               <th className="px-4 py-3">Phòng</th>
               <th className="px-4 py-3">Thời gian</th>
-              <th className="px-4 py-3">Trạng thái</th>
               <th className="px-4 py-3 text-right">Thao tác</th>
             </tr>
           </thead>
@@ -81,9 +78,6 @@ const LichCuaToiGV = () => {
                 <td className="px-4 py-3 text-slate-700">{s.lecturer}</td>
                 <td className="px-4 py-3 text-slate-700">{s.room}</td>
                 <td className="px-4 py-3 text-slate-700">{s.time}</td>
-                <td className="px-4 py-3">
-                  <StatusBadge status={s.status} />
-                </td>
                 <td className="px-4 py-3 text-right space-x-2">
                   <button
                     type="button"
@@ -96,7 +90,7 @@ const LichCuaToiGV = () => {
                     onClick={() => setConfirmDelete(s)}
                     className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-100"
                   >
-                    Xoá
+                    Huỷ lịch
                   </button>
                 </td>
               </tr>

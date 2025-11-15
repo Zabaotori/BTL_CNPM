@@ -3,13 +3,6 @@ import { Bell, MessageCircle } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import Footer from "../Footer/Footer";
 
-const navItems = [
-    { to: "/student", label: "Trang chủ", end: true },
-    { to: "/buoituvan", label: "Buổi tư vấn" },
-    { to: "/lichcuatoi", label: "Lịch của tôi" },
-    { to: "/giangvien", label: "Giảng viên" },
-];
-
 const StuHeader = () => {
     const navLinkClass = ({ isActive }) =>
         `px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition

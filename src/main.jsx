@@ -36,9 +36,9 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/student"
           element={
-            <RequireAuth role="student">
+            // <RequireAuth role="student">
               <StuHeader />
-            </RequireAuth>
+            // </RequireAuth>
           }
         >
           <Route index element={<StuDashboard />} />
@@ -51,9 +51,9 @@ createRoot(document.getElementById("root")).render(
         <Route
           path="/tutor"
           element={
-            <RequireAuth role="tutor">
+            // <RequireAuth role="tutor">
               <TutorHeader />
-            </RequireAuth>
+            // </RequireAuth>
           }
         >
           <Route index element={<TutorDashboard />} />
