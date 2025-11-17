@@ -8,7 +8,7 @@ import RequireAuth from "./components/RequireAuth";
 import Login from "./components/Login";
 
 // Student
-import StuHeader from "./student/StuHeader";
+import StuHeader from "./student/stuHeader";
 import StuDashboard from "./student/StuDashboard";
 import BuoiTuVan from "./student/BuoiTuVan";
 import LichCuaToi from "./student/LichCuaToi";
@@ -37,7 +37,7 @@ createRoot(document.getElementById("root")).render(
           path="/student"
           element={
             // <RequireAuth role="student">
-              <StuHeader />
+              <StuHeader/>
             // </RequireAuth>
           }
         >
