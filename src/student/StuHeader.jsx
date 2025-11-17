@@ -11,7 +11,7 @@ const StuHeader = () => {
     return (
         <div className="min-h-screen flex flex-col bg-slate-50">
             {/* HEADER */}
-            <header className="w-full bg-cyan-700 text-white px-6 py-3 flex items-center justify-between shadow">
+            <header className="w-full bg-cyan-600 text-white px-6 py-3 flex items-center justify-between shadow">
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-3">
                         <img
@@ -78,7 +78,7 @@ const StuHeader = () => {
             </header>
 
             {/* MAIN CONTENT */}
-            <main className="flex-1 w-full">
+            <main className="flex-1 w-full bg-blue-100">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
                     <Outlet />
                 </div>
