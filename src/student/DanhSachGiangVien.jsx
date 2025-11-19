@@ -28,6 +28,19 @@ const DanhSachGiangVien = () => {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("name");
 
+  const getAllTutors = async() => {
+    try {
+      let res = await axios({
+        url: `https://localhost:8080/student/tutors`,
+        method: 'GET',
+      })
+      console.log("data",res.data);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
   const filteredLecturers = lecturers
     .filter((l) => {
       const keyword = search.toLowerCase();
