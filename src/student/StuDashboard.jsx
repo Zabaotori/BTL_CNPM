@@ -8,23 +8,6 @@ const StuDashboard = () => {
     { label: "Giảng viên đang mở lịch", value: 5 },
   ];
 
-  const nextSessions = [
-    {
-      id: 1,
-      name: "Bổ túc PPL A",
-      course: "Nguyên lý ngôn ngữ lập trình",
-      time: "T3, 7h - 9h",
-      room: "H3 - 301",
-    },
-    {
-      id: 2,
-      name: "Tư vấn học kỳ 241",
-      course: "Kế hoạch học tập cá nhân",
-      time: "T6, 9h - 11h",
-      room: "H6 - 201",
-    },
-  ];
-
   return (
     <div className="space-y-10">
       {/* Hero */}
@@ -60,32 +43,6 @@ const StuDashboard = () => {
               >
                 Xem lịch của tôi
               </NavLink>
-            </div>
-          </div>
-
-          <div className="mt-6 sm:mt-0 sm:w-64 lg:w-72">
-            <div className="rounded-xl bg-black/10 p-4 backdrop-blur">
-              <div className="text-xs font-semibold uppercase text-black">
-                Buổi sắp diễn ra
-              </div>
-              <div className="mt-3 space-y-3 text-sm">
-                {nextSessions.map((s) => (
-                  <div
-                    key={s.id}
-                    className="rounded-lg bg-black/5 px-3 py-2 border border-white/15"
-                  >
-                    <div className="font-semibold">{s.name}</div>
-                    <div className="text-black">{s.course}</div>
-                    <div className="mt-1 flex justify-between text-xs text-black">
-                      <span>{s.time}</span>
-                      <span>{s.room}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-3 text-[11px] text-black">
-                Dữ liệu chỉ mang tính minh họa giao diện.
-              </div>
             </div>
           </div>
         </div>

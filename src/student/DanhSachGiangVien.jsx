@@ -1,58 +1,42 @@
-import React, { useState } from "react";
-
-const lecturers = [
-  {
-    id: 1,
-    name: "Giảng viên A",
-    department: "Khoa KH & KT Máy tính",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc viverra urna sit amet imperdiet mollis.",
-    course: "Nguyên lý ngôn ngữ lập trình",
-  },
-  {
-    id: 2,
-    name: "Giảng viên B",
-    department: "Khoa KH & KT Máy tính",
-    bio: "Vivamus a feugiat purus. Integer quis arcu vitae magna posuere tempus.",
-    course: "Cấu trúc dữ liệu & Giải thuật",
-  },
-  {
-    id: 3,
-    name: "Giảng viên C",
-    department: "Khoa KH & KT Máy tính",
-    bio: "Donec ultricies, nibh quis imperdiet egestas, sapien lacus convallis justo.",
-    course: "Lập trình Web",
-  },
-];
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { data, NavLink } from "react-router-dom";
 
 const DanhSachGiangVien = () => {
+  const [listTutors, setListTutors] = useState([]);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("name");
 
   const getAllTutors = async() => {
     try {
       let res = await axios({
-        url: `https://localhost:8080/student/tutors`,
+        url: `http://localhost:8080/student/tutors`,
         method: 'GET',
       })
       console.log("data",res.data);
+      setListTutors(res.data);
     }
     catch (err) {
       console.log(err);
     }
   }
 
-  const filteredLecturers = lecturers
+  useEffect(()=> {
+    getAllTutors();
+  }, []);
+
+  const filteredLecturers = listTutors
     .filter((l) => {
       const keyword = search.toLowerCase();
       return (
         l.name.toLowerCase().includes(keyword) ||
-        l.department.toLowerCase().includes(keyword) ||
-        l.course.toLowerCase().includes(keyword)
+        l.department.toLowerCase().includes(keyword) 
+        // l.course.toLowerCase().includes(keyword)
       );
     })
     .sort((a, b) => {
       if (sortBy === "name") return a.name.localeCompare(b.name);
-      if (sortBy === "course") return a.course.localeCompare(b.course);
+      // if (sortBy === "course") return a.course.localeCompare(b.course);
       return 0;
     });
 
@@ -83,7 +67,7 @@ const DanhSachGiangVien = () => {
             onChange={(e) => setSortBy(e.target.value)}
           >
             <option value="name">Sắp xếp theo tên</option>
-            <option value="course">Sắp xếp theo môn học</option>
+            {/* <option value="course">Sắp xếp theo môn học</option> */}
           </select>
         </div>
       </header>
@@ -106,24 +90,29 @@ const DanhSachGiangVien = () => {
               </div>
             </div>
 
-            <p className="mt-3 text-sm text-slate-600 line-clamp-3">
-              {lec.bio}
-            </p>
-
+            
             <div className="mt-3 text-xs text-slate-500">
-              Môn tiêu biểu:
+              Education Level:
               <span className="ml-1 font-medium text-slate-800">
-                {lec.course}
+                {lec.educationLevel}
               </span>
             </div>
 
+            <div className="mt-3 text-xs text-slate-500">
+              Experience years:
+              <span className="ml-1 font-medium text-slate-800">
+                {lec.experienceYears}
+              </span>
+            </div>
+
+
             <div className="mt-4 flex justify-end">
-              <a
-                href="/student/buoituvan"
+              <NavLink
+                to="/student/buoituvan"
                 className="inline-flex items-center rounded-full border border-cyan-600 px-3 py-1.5 text-xs font-medium text-cyan-700 hover:bg-cyan-50"
               >
                 Xem buổi tư vấn
-              </a>
+              </NavLink>
             </div>
           </article>
         ))}

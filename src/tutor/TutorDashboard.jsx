@@ -1,27 +1,11 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const TutorDashboard = () => {
   const stats = [
     { label: "Buổi tư vấn đã tạo", value: 5 },
     { label: "Buổi đã chốt lịch", value: 3 },
     { label: "Sinh viên đã đăng ký", value: 87 },
-  ];
-
-  const nextSessions = [
-    {
-      id: 1,
-      name: "Bổ túc PPL A",
-      course: "Nguyên lý ngôn ngữ lập trình",
-      time: "T3, 7h - 9h",
-      room: "H3 - 301",
-    },
-    {
-      id: 2,
-      name: "Tư vấn học kỳ 241",
-      course: "Kế hoạch học tập cá nhân",
-      time: "T6, 9h - 11h",
-      room: "H6 - 201",
-    },
   ];
 
   return (
@@ -46,44 +30,18 @@ const TutorDashboard = () => {
               dõi số lượng đăng ký và trạng thái buổi tư vấn.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href="/tutor/buoituvan"
+              <NavLink
+                to="/tutor/buoituvan"
                 className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-cyan-200"
               >
                 Quản lý buổi tư vấn
-              </a>
-              <a
-                href="/tutor/lichcuatoi"
+              </NavLink>
+              <NavLink
+                to="/tutor/lichcuatoi"
                 className="inline-flex items-center rounded-full border border-white/70 px-4 py-2 text-sm font-medium text-black hover:bg-white/10"
               >
                 Xem lịch của tôi
-              </a>
-            </div>
-          </div>
-
-          <div className="mt-6 sm:mt-0 sm:w-64 lg:w-72">
-            <div className="rounded-xl bg-black/10 p-4 backdrop-blur">
-              <div className="text-xs font-semibold uppercase text-black">
-                Buổi sắp diễn ra
-              </div>
-              <div className="mt-3 space-y-3 text-sm">
-                {nextSessions.map((s) => (
-                  <div
-                    key={s.id}
-                    className="rounded-lg bg-white/5 px-3 py-2 border border-white/15"
-                  >
-                    <div className="font-semibold">{s.name}</div>
-                    <div className="text-black">{s.course}</div>
-                    <div className="mt-1 flex justify-between text-xs text-black">
-                      <span>{s.time}</span>
-                      <span>{s.room}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-3 text-[11px] text-black">
-                Dữ liệu chỉ mang tính minh họa giao diện.
-              </div>
+              </NavLink>
             </div>
           </div>
         </div>

@@ -1,53 +1,51 @@
 // src/Login.jsx
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const predefinedUsers = [
-  {
-    email: "student@hcmut.edu.vn",
-    password: "123456",
-    role: "student",
-  },
-  {
-    email: "tutor@hcmut.edu.vn",
-    password: "123456",
-    role: "tutor",
-  },
-];
 
 const Login = () => {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLoginAxios = async (e) => {
+  e.preventDefault();
+  setError(""); // reset lỗi trước đó
 
-    const user = predefinedUsers.find(
-      (u) => u.email === email && u.password === password
+  try {
+    let res = await axios.post(
+      "http://localhost:8080/auth/login",
+      {
+        email: email,
+        password: password,
+      }
     );
 
-    if (!user) {
-      setError("Sai email hoặc mật khẩu!");
-      return;
-    }
+    console.log("Login success:", res.data);
 
-    // Lưu role vào localStorage
-    localStorage.setItem("role", user.role);
+    // Lưu thông tin người dùng
+    localStorage.setItem("role", res.data.role);
+    localStorage.setItem("userId", res.data.userId);
+    localStorage.setItem("name", res.data.name);
 
     // Điều hướng theo role
-    if (user.role === "student") {
+    if (res.data.role === "student") {
       navigate("/student");
-    } else {
+    } else if (res.data.role === "tutor") {
       navigate("/tutor");
     }
-  };
+  } catch (err) {
+    console.log(err);
 
-  // const handleLoginAxios = async() => {
-    
-  // }
+    // Trường hợp sai mật khẩu / không tìm thấy user
+    if (err.response && err.response.status === 400) {
+      setError("Email hoặc mật khẩu không đúng!");
+    } else {
+      setError("Lỗi kết nối server!");
+    }
+  }
+};
 
 
   return (
@@ -57,7 +55,7 @@ const Login = () => {
           Đăng nhập hệ thống tư vấn
         </h1>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLoginAxios} className="space-y-4">
 
           <div>
             <label className="text-sm font-medium text-slate-700">Email</label>
@@ -94,13 +92,6 @@ const Login = () => {
             Đăng nhập
           </button>
         </form>
-
-        {/* Tài khoản mẫu */}
-        <div className="mt-6 text-xs text-slate-500 border-t pt-4">
-          <p className="font-semibold mb-1">Tài khoản mẫu:</p>
-          <p>👨‍🎓 Sinh viên → student@hcmut.edu.vn / 123456</p>
-          <p>👨‍🏫 Giảng viên → tutor@hcmut.edu.vn / 123456</p>
-        </div>
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ createRoot(document.getElementById("root")).render(
           element={
             // <RequireAuth role="student">
               <StuHeader/>
-            // </RequireAuth>
+            // </RequireAuth> 
           }
         >
           <Route index element={<StuDashboard />} />

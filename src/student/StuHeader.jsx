@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Bell, MessageCircle } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import Footer from "../Footer/Footer";
+import axios from "axios";
 
 const StuHeader = () => {
     const navLinkClass = ({ isActive }) =>
         `px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition
      ${isActive ? "bg-white/20" : "hover:bg-cyan-600"}`;
+
+    const userId = localStorage.getItem('userId');
+    const name = localStorage.getItem('name');
+    const role = localStorage.getItem('role');
+    // console.log(userId);
+    // console.log(name);
+    // console.log(role);
 
     return (
         <div className="min-h-screen flex flex-col bg-slate-50">
@@ -70,8 +78,8 @@ const StuHeader = () => {
                             className="w-9 h-9 rounded-full border border-white/60 object-cover"
                         />
                         <div className="hidden sm:block text-xs leading-tight">
-                            <div className="font-semibold">SV. Nguyễn Văn A</div>
-                            <div className="text-cyan-100">Khoa KH &amp; KT Máy tính</div>
+                            <div className="font-semibold">{name}</div>
+                            <div className="text-cyan-100">{role}</div>
                         </div>
                     </div>
                 </div>
