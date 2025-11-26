@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Calendar } from "lucide-react";
+import { Building2, Calendar, Clock } from "lucide-react";
 
 const QuanLyDangKy = () => {
   const [consultationSessions, setConsultationSessions] = useState([]);
@@ -187,10 +187,12 @@ const QuanLyDangKy = () => {
                        {sessionGroup.sessionDate ? new Date(sessionGroup.sessionDate).toLocaleDateString("vi-VN") : "N/A"}
                     </span>
                     <span>
-                      ⏰ {sessionGroup.sessionStartTime?.slice(0, 5)} - {sessionGroup.sessionEndTime?.slice(0, 5)}
+                      <Clock className=" inline-block text-red-400 mr-1 h-[50%]"></Clock>
+                       {sessionGroup.sessionStartTime?.slice(0, 5)} - {sessionGroup.sessionEndTime?.slice(0, 5)}
                     </span>
                     <span>
-                      🏢 {sessionGroup.room || "Chưa có phòng"}
+                      <Building2 className=" inline-block text-yellow-400 mr-1 h-[50%]"></Building2>
+                      {sessionGroup.room || "Chưa có phòng"}
                     </span>
                     <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
                       sessionGroup.sessionType === "online" 

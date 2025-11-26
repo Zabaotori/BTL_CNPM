@@ -73,7 +73,7 @@ const StuHeader = () => {
             </header>
 
             {/* MAIN CONTENT */}
-            <main className="flex-1 w-full bg-blue-100">
+            <main className="flex-1 w-full ">
                 <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
                     <Outlet />
                 </div>

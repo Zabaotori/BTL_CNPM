@@ -1,3 +1,4 @@
+import { BookOpen, ExternalLink, Library } from "lucide-react";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
@@ -20,8 +21,8 @@ const TutorDashboard = () => {
           />
         </div>
 
-        <div className="relative bg-white/15 p-16 sm:p-24 lg:p-40 flex flex-col gap-6 sm:flex-row sm:items-center">
-          <div className="flex-1">
+        <div className="relative  p-16 sm:p-24 lg:p-42 gap-6  sm:items-center">
+          <div className=" bg-cyan-800/15 p-4 rounded-2xl inline-block">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight">
               Quản lý buổi tư vấn &amp; lịch làm việc
             </h1>
@@ -48,12 +49,56 @@ const TutorDashboard = () => {
       </section>
 
       {/* Stats */}
-      <section>
-        <h2 className="text-lg font-semibold text-slate-800 mb-4">
-          Đi đến thư viện
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <section className="bg-white rounded-2xl border mt-25 border-slate-300 shadow-sm overflow-hidden">
+        <div className="flex flex-col lg:flex-row">
+          {/* Image Section */}
+          <div className="lg:w-2/5">
+            <img
+              src="https://www.uit.edu.vn/sites/vi/files/image_from_word/thu_vien_trung_tam_1.jpg"
+              alt="Thư viện Đại học VNU"
+              className="w-full h-48 lg:h-full object-cover"
+            />
+          </div>
           
+          {/* Content Section */}
+          <div className="lg:w-3/5 p-8">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="bg-cyan-600 rounded-xl p-3 text-white">
+                <Library className="w-8 h-8" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-semibold text-slate-800">
+                  Thư viện Đại học VNU
+                </h2>
+                <p className="text-slate-600 mt-1">
+                  Khám phá kho tài liệu điện tử phong phú với hàng ngàn đầu sách, 
+                  luận văn, tạp chí khoa học và tài liệu tham khảo
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3 mt-6">
+              <a
+                href="https://www.vnulib.edu.vn/index.php/tai-lieu-dien-tu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 rounded-xl bg-cyan-600 px-6 py-4 text-white font-medium shadow-sm transition-all duration-200 group"
+              >
+                <BookOpen className="w-5 h-5" />
+                <span>Truy cập Thư viện điện tử</span>
+                <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+              </a>
+              
+              <div className="flex items-center gap-4 text-sm text-slate-500">
+                <span className="flex items-center gap-1">
+                  <BookOpen className="w-4 h-4" />
+                  10,000+ tài liệu
+                </span>
+                <span>•</span>
+                <span>Truy cập 24/7</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
