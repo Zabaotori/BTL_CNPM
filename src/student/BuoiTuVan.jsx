@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 
 const BuoiTuVan = () => {
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState("name");
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [sortBy, setSortBy] = useState("date"); // Mặc định sắp xếp theo ngày
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,37 +42,58 @@ const BuoiTuVan = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
+      const studentId = localStorage.getItem("userId");
+
       // Lấy danh sách giảng viên
       const tutorsData = await getAllTutors();
-      
-      // Với mỗi giảng viên, lấy sessions của họ
+
+      // Với mỗi GV lấy sessions
       const tutorsWithSessions = await Promise.all(
         tutorsData.map(async (tutor) => {
-          try {
-            const sessions = await getTutorSessions(tutor.id);
-            // Thêm thông tin tutor vào mỗi session
-            const sessionsWithTutor = sessions.map(session => ({
-              ...session,
-              tutor: {
-                id: tutor.id,
-                name: tutor.name,
-                email: tutor.email
-              }
-            }));
-            return sessionsWithTutor;
-          } catch (err) {
-            return [];
-          }
+          const sessions = await getTutorSessions(tutor.id);
+
+          return sessions.map(s => ({
+            ...s,
+            tutor: {
+              id: tutor.id,
+              name: tutor.name,
+              email: tutor.email
+            }
+          }));
         })
       );
-      
-      // Gom tất cả sessions thành một mảng duy nhất
+
       const allSessions = tutorsWithSessions.flat();
-      setTutors(allSessions);
+
+      // ✨ Lấy danh sách đăng ký của SV
+      const registrations = await axios.get(
+        `http://localhost:8080/student/registrations?studentId=${studentId}`
+      );
+
+      console.log(registrations.data);
+
+      const regList = registrations.data; // mảng các registration
+
+      // ✨ Gắn trạng thái registered vào mỗi session
+      const sessionsWithReg = allSessions.map((session) => {
+        const reg = regList.find(
+          (r) => r.availableSessionId === session.id
+        );
+
+        return {
+          ...session,
+          registered: reg?.status === "pending" || reg?.status === "approved",
+          cancelled: reg?.status === "canceled",
+          rejected: reg?.status === "rejected",
+          registrationId: reg?.id || null,
+          registrationStatus: reg?.status || null
+        };
+      });
+
+      setTutors(sessionsWithReg);
     } catch (err) {
-      setError("Không thể tải dữ liệu. Vui lòng thử lại sau.");
-      console.log("Lỗi khi tải dữ liệu:", err);
+      setError("Không thể tải dữ liệu.");
     } finally {
       setLoading(false);
     }
@@ -86,6 +106,11 @@ const BuoiTuVan = () => {
   // Lọc và sắp xếp sessions
   const filteredSessions = tutors
     .filter((session) => {
+      // Ẩn các session có status approved hoặc rejected
+      if (session.registrationStatus === "approved" || session.registrationStatus === "rejected") {
+        return false;
+      }
+
       if (!search) return true;
       const keyword = search.toLowerCase();
       return (
@@ -95,31 +120,47 @@ const BuoiTuVan = () => {
       );
     })
     .sort((a, b) => {
-      if (sortBy === "name") return a.tutor?.name?.localeCompare(b.tutor?.name);
-      if (sortBy === "course") return a.name?.localeCompare(b.name);
-      return 0;
+      switch (sortBy) {
+        case "date":
+          // Sắp xếp theo ngày gần nhất
+          return new Date(a.date) - new Date(b.date);
+        
+        case "name":
+          // Sắp xếp theo tên giảng viên
+          return a.tutor?.name?.localeCompare(b.tutor?.name);
+        
+        case "course":
+          // Sắp xếp theo tên môn học
+          return a.name?.localeCompare(b.name);
+        
+        case "time":
+          // Sắp xếp theo thời gian trong ngày
+          return a.startTime?.localeCompare(b.startTime);
+        
+        default:
+          return 0;
+      }
     });
 
   // Hàm đăng ký/huỷ đăng ký session
-  const handleRegisterSession = async (sessionId, isRegistering) => {
+  const handleRegisterSession = async (session, isRegistering) => {
+    const studentId = localStorage.getItem("userId");
+
     try {
-      const studentId = localStorage.getItem("userId");
-      
       if (isRegistering) {
-        await axios.post(`http://localhost:8080/student/sessions/${sessionId}/register`, {
-          studentId: Number(studentId)
-        });
+        await axios.post(
+          `http://localhost:8080/student/available-sessions/${session.id}/register?studentId=${studentId}`
+        );
       } else {
-        await axios.delete(`http://localhost:8080/student/sessions/${sessionId}/cancel`, {
-          data: { studentId: Number(studentId) }
-        });
+        await axios.delete(
+          `http://localhost:8080/student/registrations/${session.registrationId}`
+        );
       }
-      
+
       await loadData();
-      
     } catch (err) {
-      console.log("Lỗi khi đăng ký/huỷ session:", err);
-      alert("Có lỗi xảy ra. Vui lòng thử lại.");
+      console.log(err);
+      alert("Không thể thực hiện yêu cầu.");
     }
   };
 
@@ -135,7 +176,7 @@ const BuoiTuVan = () => {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="text-lg text-red-600">{error}</div>
-        <button 
+        <button
           onClick={loadData}
           className="ml-4 rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-700"
         >
@@ -173,105 +214,118 @@ const BuoiTuVan = () => {
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
           >
+            <option value="date">Sắp xếp theo ngày</option>
             <option value="name">Sắp xếp theo tên GV</option>
             <option value="course">Sắp xếp theo môn học</option>
+            <option value="time">Sắp xếp theo giờ</option>
           </select>
-
-          <button
-            type="button"
-            onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center rounded-lg bg-cyan-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700"
-          >
-            Gợi ý buổi tư vấn
-          </button>
         </div>
       </header>
 
       {/* Cards - Mỗi session là một card riêng */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredSessions.map((session) => (
-          <SessionCard 
-            key={session.id} 
-            session={session} 
+          <SessionCard
+            key={session.id}
+            session={session}
             onRegister={handleRegisterSession}
           />
         ))}
 
         {filteredSessions.length === 0 && (
-          <div className="col-span-full text-center text-sm text-slate-500 py-10">
-            Không tìm thấy buổi tư vấn phù hợp với từ khóa "{search}".
+          <div className="col-span-full text-center py-12">
+            <div className="text-slate-400 mb-3">
+              <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-slate-700 mb-1">
+              Không tìm thấy buổi tư vấn
+            </h3>
+            <p className="text-sm text-slate-500">
+              {search 
+                ? `Không có buổi tư vấn nào phù hợp với từ khóa "${search}".` 
+                : "Hiện không có buổi tư vấn nào đang mở đăng ký."}
+            </p>
           </div>
         )}
       </section>
-
-      <CreateConsultationModal
-        open={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-      />
     </div>
   );
 };
 
 // Component cho mỗi session card
 const SessionCard = ({ session, onRegister }) => {
-  const [registered, setRegistered] = useState(session.registered || false);
+  const [processing, setProcessing] = useState(false);
 
   const handleToggle = async () => {
+    if (processing) return;
+    setProcessing(true);
+
     try {
-      await onRegister(session.id, !registered);
-      setRegistered(!registered);
-    } catch (err) {
-      console.log("Lỗi khi thay đổi trạng thái đăng ký:", err);
+      await onRegister(session, !session.registered);
+    } finally {
+      setProcessing(false);
     }
   };
 
+  // Kiểm tra xem session có còn trong tương lai không
+  const isFutureSession = new Date(session.date) >= new Date();
+
   return (
-    <div className="bg-white border border-slate-300 rounded-xl shadow-sm p-5 flex flex-col h-full hover:shadow-md transition-shadow duration-200">
-      {/* Thông tin giảng viên */}
+    <div className={`bg-white border rounded-xl shadow-sm p-5 flex flex-col ${
+      !session.open ? "opacity-60" : ""
+    }`}>
+      {/* Header với tên GV và status */}
       <div className="mb-4 pb-3 border-b border-slate-100">
-        <h3 className="text-xl font-semibold text-slate-800">
-          {session.tutor?.name || "Giảng viên"}
-        </h3>
-        <p className="text-sm text-slate-500 mt-1">
-          {session.tutor?.email}
-        </p>
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-xl font-semibold">{session.tutor?.name}</h3>
+          <div className="flex flex-col items-end gap-1">
+            {!session.open && (
+              <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800">
+                Đã đóng
+              </span>
+            )}
+            {session.registered && (
+              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                Đã đăng ký
+              </span>
+            )}
+          </div>
+        </div>
+        <p className="text-sm text-slate-500">{session.tutor?.email}</p>
       </div>
 
-      {/* Thông tin buổi tư vấn */}
+      {/* Nội dung session */}
       <div className="flex-1">
         <h4 className="font-medium text-slate-800 text-lg mb-2">
-          {session.name || "Buổi tư vấn"}
+          {session.name}
         </h4>
-        
+
         <p className="text-sm text-slate-600 mb-3 line-clamp-2">
           {session.description || "Không có mô tả"}
         </p>
 
-        {/* Chi tiết buổi tư vấn */}
         <div className="space-y-2 text-sm text-slate-600">
           <div className="flex items-center gap-2">
-            <span><Calendar size={16} className="text-red-500" /></span>
-            <span>
-              {session.date ? new Date(session.date).toLocaleDateString("vi-VN") : "Chưa xác định"}
-            </span>
+            <Calendar size={16} className="text-red-500" />
+            <span>{new Date(session.date).toLocaleDateString("vi-VN")}</span>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <span><Clock size={16} className="text-cyan-500" /></span>
+            <Clock size={16} className="text-cyan-500" />
             <span>
               {session.startTime?.slice(0, 5)} - {session.endTime?.slice(0, 5)}
             </span>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <span><Users size={16} className="text-green-500" /></span>
-            <span>
-              {session.maxStudents || 1} sinh viên
-            </span>
+            <Users size={16} className="text-green-500" />
+            <span>{session.maxStudents} sinh viên</span>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <span><MessageCircle size={16} className="text-yellow-500" /></span>
+            <MessageCircle size={16} className="text-yellow-500" />
             <span className="capitalize">
               {session.type === "online" ? "Trực tuyến" : "Trực tiếp"}
             </span>
@@ -279,75 +333,34 @@ const SessionCard = ({ session, onRegister }) => {
         </div>
       </div>
 
-      {/* Nút đăng ký/huỷ */}
+      {/* Nút hành động */}
       <div className="mt-4 pt-3 border-t border-slate-100">
         <button
           type="button"
+          disabled={processing || session.cancelled || !session.open || !isFutureSession}
           onClick={handleToggle}
-          className={`w-full py-2 rounded-lg text-sm font-medium text-white transition-colors duration-200
-            ${
-              registered
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-cyan-600 hover:bg-cyan-700"
+          className={`w-full py-2 rounded-lg text-sm font-medium text-white 
+            ${session.cancelled
+              ? "bg-slate-400 cursor-not-allowed"
+              : !session.open || !isFutureSession
+                ? "bg-slate-400 cursor-not-allowed"
+                : session.registered
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-cyan-600 hover:bg-cyan-700"
             }`}
         >
-          {registered ? "Huỷ đăng ký" : "Đăng ký ngay"}
+          {processing
+            ? "Đang xử lý..."
+            : session.cancelled
+              ? "Đã huỷ đăng ký"
+              : !session.open
+                ? "Đã đóng đăng ký"
+                : !isFutureSession
+                  ? "Đã kết thúc"
+                  : session.registered
+                    ? "Huỷ đăng ký"
+                    : "Đăng ký ngay"}
         </button>
-      </div>
-    </div>
-  );
-};
-
-const CreateConsultationModal = ({ open, onClose }) => {
-  if (!open) return null;
-
-  return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-        <h2 className="text-lg font-semibold text-slate-800 mb-4">
-          Gợi ý / yêu cầu buổi tư vấn
-        </h2>
-
-        <div className="space-y-4 text-sm">
-          <div>
-            <label className="block text-slate-700 text-sm font-medium">
-              Môn học / chủ đề
-            </label>
-            <input
-              type="text"
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              placeholder="Ví dụ: Nguyên lý ngôn ngữ lập trình"
-            />
-          </div>
-
-          <div>
-            <label className="block text-slate-700 text-sm font-medium">
-              Mô tả nhu cầu
-            </label>
-            <textarea
-              rows={3}
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              placeholder="Bạn cần giảng viên hỗ trợ nội dung gì, lớp/mã số SV, số lượng dự kiến..."
-            />
-          </div>
-        </div>
-
-        <div className="mt-6 flex justify-end gap-3 text-sm">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg border border-slate-200 px-4 py-2 font-medium text-slate-700 hover:bg-slate-50"
-          >
-            Huỷ
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg bg-cyan-600 px-4 py-2 font-medium text-white hover:bg-cyan-700"
-          >
-            Gửi
-          </button>
-        </div>
       </div>
     </div>
   );

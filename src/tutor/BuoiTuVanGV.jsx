@@ -49,8 +49,7 @@ const BuoiTuVanGV = () => {
       let res = await axios({
         url: `http://localhost:8080/tutor/${userId}/available-sessions`,
         method: "GET"
-      })
-      console.log("dataSessions", res.data);
+      });
       setSessions(res.data);
     }
     catch (err) {
@@ -279,6 +278,7 @@ const BuoiTuVanGV = () => {
                 <Trash2 size={16} />
                 Xoá
               </button>
+              
             </div>
           </article>
         ))}

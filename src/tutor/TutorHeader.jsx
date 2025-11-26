@@ -8,7 +8,7 @@ const TutorHeader = () => {
         `px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition
      ${isActive ? "bg-white/20" : "hover:bg-cyan-600"}`;
 
-     const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     const name = localStorage.getItem('name');
     const role = localStorage.getItem('role');
     // console.log(userId);
@@ -53,22 +53,6 @@ const TutorHeader = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <button
-                        type="button"
-                        className="relative p-2 rounded-full hover:bg-cyan-600 transition"
-                    >
-                        <Bell className="w-5 h-5" />
-                        <span className="absolute -top-0.5 -right-0.5 inline-flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold">
-                            2
-                        </span>
-                    </button>
-
-                    <button
-                        type="button"
-                        className="p-2 rounded-full hover:bg-cyan-600 transition"
-                    >
-                        <MessageCircle className="w-5 h-5" />
-                    </button>
 
                     <div className="flex items-center gap-2">
                         <img
@@ -83,12 +67,16 @@ const TutorHeader = () => {
                             </div>
                         </div>
                     </div>
+
+                    <NavLink className=" bg-cyan-700 cursor-pointer p-2 rounded hover:bg-cyan-400 text-sm" to={'/login'}>
+                        Đăng xuất
+                    </NavLink>
                 </div>
             </header>
 
             {/* CONTENT */}
             <main className="flex-1 w-full bg-blue-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
+                <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-16">
                     <Outlet />
                 </div>
             </main>

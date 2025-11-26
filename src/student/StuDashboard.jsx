@@ -20,7 +20,7 @@ const StuDashboard = () => {
           />
         </div>
 
-        <div className="relative bg-white/15 p-8 sm:p-16 lg:p-24 flex flex-col gap-6 sm:flex-row sm:items-center">
+        <div className="relative bg-white/15 p-16 sm:p-24 lg:p-40 flex flex-col gap-6 sm:flex-row sm:items-center">
           <div className="flex-1">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight">
               Quản lý buổi tư vấn <br />
@@ -51,22 +51,10 @@ const StuDashboard = () => {
       {/* Stats */}
       <section>
         <h2 className="text-lg font-semibold text-slate-800 mb-4">
-          Tổng quan tư vấn của tôi
+          Đi đến thư viện
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {stats.map((s) => (
-            <div
-              key={s.label}
-              className="rounded-xl bg-white border border-slate-100 shadow-sm px-4 py-3"
-            >
-              <div className="text-xs font-medium text-slate-500">
-                {s.label}
-              </div>
-              <div className="mt-2 text-2xl font-semibold text-cyan-700">
-                {s.value}
-              </div>
-            </div>
-          ))}
+        <div className="">
+          
         </div>
       </section>
     </div>
