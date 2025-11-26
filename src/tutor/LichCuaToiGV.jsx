@@ -509,9 +509,6 @@ const ConfirmSessionModal = ({ open, session, room, onRoomChange, onCancel, onCo
             <span className="font-medium">Số sinh viên đã đăng ký: </span>
             <span className="font-semibold text-blue-600">{registrationCount}</span>
           </div>
-          <div className="text-amber-600 text-xs bg-amber-50 p-2 rounded border border-amber-200">
-            ⚠️ Khi xác nhận, tất cả {registrationCount} registration của buổi này sẽ được tự động duyệt.
-          </div>
         </div>
 
         <div className="space-y-2">

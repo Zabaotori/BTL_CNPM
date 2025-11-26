@@ -183,15 +183,15 @@ const QuanLyDangKy = () => {
                   </h3>
                   <div className="flex flex-wrap items-center gap-4 mt-1 text-sm text-slate-600">
                     <span>
-                      <Calendar className=" inline-block text-blue-400 mr-1 h-[50%]"></Calendar>
+                      <Calendar className=" inline-block text-blue-400 mr-1 w-5"></Calendar>
                        {sessionGroup.sessionDate ? new Date(sessionGroup.sessionDate).toLocaleDateString("vi-VN") : "N/A"}
                     </span>
                     <span>
-                      <Clock className=" inline-block text-red-400 mr-1 h-[50%]"></Clock>
+                      <Clock className=" inline-block text-red-400 mr-1 w-5"></Clock>
                        {sessionGroup.sessionStartTime?.slice(0, 5)} - {sessionGroup.sessionEndTime?.slice(0, 5)}
                     </span>
                     <span>
-                      <Building2 className=" inline-block text-yellow-400 mr-1 h-[50%]"></Building2>
+                      <Building2 className=" inline-block text-yellow-400 mr-1 w-5"></Building2>
                       {sessionGroup.room || "Chưa có phòng"}
                     </span>
                     <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
