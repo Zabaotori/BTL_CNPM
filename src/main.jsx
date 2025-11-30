@@ -8,7 +8,7 @@ import RequireAuth from "./components/RequireAuth";
 import Login from "./components/Login";
 
 // Student
-import StuHeader from "./student/stuHeader";
+import StuHeader from "./student/StuHeader";
 import StuDashboard from "./student/StuDashboard";
 import BuoiTuVan from "./student/BuoiTuVan";
 import LichCuaToi from "./student/LichCuaToi";
